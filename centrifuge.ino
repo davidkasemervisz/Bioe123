@@ -26,7 +26,6 @@ long lastLoopTime;
 
 void setup() {
   Serial.begin(9600);
-  Serial.println("Why!");
 
   initDisplay();
   updateDisplay(0, 0);
