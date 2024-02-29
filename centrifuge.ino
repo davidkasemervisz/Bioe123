@@ -1,27 +1,22 @@
 
-/*
-TODO:
-  - time and rpm range caps
-  - where to measure rpm
-  - better diodes
-  - complete documentation
-*/
-
 #include "StateManager.h"
+#include "MotorManager.h"
 #include "LiquidCrystalDisplay.h"
 #include "Button.h"
 
-const int location_interruptSignal = 0;
+const int location_buttonInterruptSignal = 7;
+const int location_motorInterruptSignal = 0;
 const int location_startButton = A0;
 const int location_stopButton = A1;
 const int location_timeUpButton = A2;
 const int location_timeDownButton = A3;
 const int location_rpmUpButton = A4;
 const int location_rpmDownButton = A5;
+const int location_motorPWM = 5;
 
 StateManager stateManager = StateManager();
-const int BUTTON_COOLDOWN_TIME = 100;
-long lastButtonTime;
+MotorManager motorManager = MotorManager();
+
 long lastLoopTime;
 
 void setup() {
@@ -36,20 +31,22 @@ void setup() {
   pinMode(location_timeDownButton, INPUT);
   pinMode(location_rpmUpButton, INPUT);
   pinMode(location_rpmDownButton, INPUT);
-  pinMode(location_interruptSignal, INPUT);
-  attachInterrupt(digitalPinToInterrupt(location_interruptSignal), buttonPressed, RISING);
+  pinMode(location_buttonInterruptSignal, INPUT);
+  pinMode(location_motorInterruptSignal, INPUT);
+  attachInterrupt(digitalPinToInterrupt(location_buttonInterruptSignal), buttonPressed, RISING);
+  attachInterrupt(digitalPinToInterrupt(location_motorInterruptSignal), motorRotated, RISING);
+  pinMode(location_motorPWM, OUTPUT);
+
+  updateDisplay(0, 0);
+}
+
+void motorRotated() {
+  motorManager.RegisterRotation();
 }
 
 void buttonPressed() {
-  int dt = millis() - lastButtonTime;
-  lastButtonTime = millis();
-  
-  if(dt >= BUTTON_COOLDOWN_TIME) {
-    determineButtonPressed();
-  }
-}
+  return;
 
-void determineButtonPressed() {
   int button = -1;
 
   int signal_start = analogRead(location_startButton);
@@ -74,11 +71,19 @@ void determineButtonPressed() {
 void loop() {
   float dt = (millis() - lastLoopTime) / 1000.0f;
   lastLoopTime = millis();
+  
+  analogWrite(location_motorPWM, 255);
 
   stateManager.Update(dt);
+  motorManager.Update(dt);
   
   int rpm = 0;
   int time = 0;
   stateManager.GetDisplayValues(&rpm, &time);
+
+  //if(stateManager.GetState() == RUNNING_STATE) {
+    rpm = motorManager.GetCurrentRPM();
+  //}
+
   updateDisplay(rpm, time);
 }
