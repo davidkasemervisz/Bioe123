@@ -37,4 +37,5 @@ class StateManager {
     void ButtonPressed(int button);
 
     int GetState() { return m_currentState; }
+    int GetTargetRPM() { return m_set_rpm; }
 };

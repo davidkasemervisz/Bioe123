@@ -18,9 +18,9 @@ void StateManager::SetState(int state) {
   }
 }
 
-void StateManager::InitIdleState() {} // stops motor
+void StateManager::InitIdleState() {} 
 
-void StateManager::InitRunningState() { // starts motor
+void StateManager::InitRunningState() {
   m_reset = false;
 } 
 
