@@ -1,9 +1,4 @@
 
-/*
-Ranges for RPM and time
-
-*/
-
 #include "StateManager.h"
 #include "MotorManager.h"
 #include "LiquidCrystalDisplay.h"
@@ -64,6 +59,13 @@ void updateButtonPress() {
 }
 
 float timer = 0;
+void printRPM(int rpm, float dt) {
+  timer += dt;
+  if(timer >= 1) {
+    Serial.println(rpm);
+    timer = 0;
+  }
+}
 
 void loop() {
   float dt = (millis() - lastLoopTime) / 1000.0f;
@@ -88,12 +90,7 @@ void loop() {
 
   if(isRunning) {
     rpm = motorManager.GetCurrentRPM();
-
-    timer += dt;
-    if(timer >= 1) {
-      Serial.println(rpm);
-      timer = 0;
-    }
+    printRPM(rpm, dt);
   }
 
   updateDisplay(rpm, time);
