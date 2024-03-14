@@ -12,6 +12,10 @@ class StateManager {
 
     int m_currentState = IDLE_STATE;
 
+    const int MAX_TIME = 1800; // 30 minutes
+    const int MAX_RPM = 3000;
+    const int MIN_RPM = 1000;
+
     const int DEFAULT_RPM = 2500;
     const int DEFAULT_TIME = 600; // 10 minutes
 

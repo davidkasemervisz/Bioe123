@@ -5,7 +5,7 @@
 MotorManager::MotorManager(float targetRPM) {
   m_targetRPM = targetRPM;
   m_pid.SetMode(AUTOMATIC);
-  m_pid.SetOutputLimits(0, 255);
+  m_pid.SetOutputLimits(0, 255); 
 }
 
 void MotorManager::RegisterRotation() {

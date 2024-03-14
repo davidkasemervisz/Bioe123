@@ -52,6 +52,7 @@ void updateMotorSpeed() {
 
 void updateButtonPress() {
   int input = analogRead(location_buttonSignal);
+
   int button = getButtonPressed(input);
   if(button != NO_BUTTON_PRESSED) {
     stateManager.ButtonPressed(button);
@@ -61,6 +62,8 @@ void updateButtonPress() {
     }
   }
 }
+
+float timer = 0;
 
 void loop() {
   float dt = (millis() - lastLoopTime) / 1000.0f;
@@ -85,6 +88,12 @@ void loop() {
 
   if(isRunning) {
     rpm = motorManager.GetCurrentRPM();
+
+    timer += dt;
+    if(timer >= 1) {
+      Serial.println(rpm);
+      timer = 0;
+    }
   }
 
   updateDisplay(rpm, time);

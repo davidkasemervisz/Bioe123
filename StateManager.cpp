@@ -86,26 +86,44 @@ void StateManager::IdleButtonPressed(int button) {
 
   else if(button == TIME_UP) {
     m_time += TIME_INC;
+    if(m_time > MAX_TIME) {
+      m_time = MAX_TIME;
+    }
 
     if(m_reset) {
       m_set_time += TIME_INC;
+      if(m_set_time > MAX_TIME) {
+        m_set_time = MAX_TIME;
+      }
     }
   }
 
   else if(button == TIME_DOWN) {
     m_time -= TIME_INC;
+    if(m_time < 0) {
+      m_time = 0;
+    }
 
     if(m_reset) {
       m_set_time -= TIME_INC;
+      if(m_set_time < 0) {
+        m_set_time = 0;
+      }
     }
   }
 
   else if(button == RPM_UP) {
     m_set_rpm += RPM_INC;
+    if(m_set_rpm > MAX_RPM) {
+      m_set_rpm = MAX_RPM;
+    }
   }
 
   else if(button == RPM_DOWN) {
     m_set_rpm -= RPM_INC;
+    if(m_set_rpm < MIN_RPM) {
+      m_set_rpm = MIN_RPM;
+    }
   }
 }
 
@@ -118,17 +136,29 @@ void StateManager::RunningButtonPressed(int button) {
 
   else if(button == TIME_UP) {
     m_time += TIME_INC;
+    if(m_time > MAX_TIME) {
+      m_time = MAX_TIME;
+    }
   }
 
   else if(button == TIME_DOWN) {
     m_time -= TIME_INC;
+    if(m_time < 0) {
+      m_time = 0;
+    }
   }
 
   else if(button == RPM_UP) {
     m_set_rpm += RPM_INC;
+    if(m_set_rpm > MAX_RPM) {
+      m_set_rpm = MAX_RPM;
+    }
   }
 
   else if(button == RPM_DOWN) {
     m_set_rpm -= RPM_INC;
+    if(m_set_rpm < MIN_RPM) {
+      m_set_rpm = MIN_RPM;
+    }
   }
 }
